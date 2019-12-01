@@ -39,7 +39,7 @@ def prep_image_batch(img_slices):
         # resize image, broadcast into 3 channels
         img = np.repeat(np.expand_dims(resize(img, (IMG_SIZE, IMG_SIZE)), -1), 3, axis=-1)
         img_batch.append(img)
-    return np.asarray(img_batch) # now has batch_dim = num slices, IMG_SIZE rows and cols, and 3 identical channels
+    return np.asarray(img_batch, dtype=np.float32) # now has batch_dim = num slices, IMG_SIZE rows and cols, and 3 identical channels
 
 
 if __name__ == '__main__':
