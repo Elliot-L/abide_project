@@ -18,17 +18,17 @@ if __name__ == '__main__':
     x_valid = np.expand_dims(x_valid, axis=-1)
     input_shape = (61, 73, 61, 1)
     model = tf.keras.models.Sequential()
-    model.add(layers.Conv3D(32, kernel_size=(3, 3, 1), activation='relu', input_shape=input_shape))
-    model.add(layers.Conv3D(32, kernel_size=(3, 3, 1), activation='relu'))
-    model.add(layers.MaxPooling3D(pool_size=(2, 2, 1)))
+    model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', input_shape=input_shape))
+    model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu'))
+    model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
 
     model.add(layers.Dropout(0.25))
-    model.add(layers.Conv3D(64, kernel_size=(3, 3, 1), activation='relu'))
-    model.add(layers.Conv3D(64, kernel_size=(3, 3, 1), activation='relu'))
-    model.add(layers.MaxPooling3D(pool_size=(2, 2, 1)))
+    model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
+    model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
+    model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
-    model.add(layers.Dense(256, activation='relu'))
+    model.add(layers.Dense(32, activation='relu'))
     model.add(layers.Dense(2, activation='softmax'))
 
     model.compile(loss='sparse_categorical_crossentropy',
@@ -37,5 +37,5 @@ if __name__ == '__main__':
 
     model.fit(x_train, y_train,
               validation_data=(x_valid, y_valid),
-              batch_size=16,
+              batch_size=1,
               epochs=100)
