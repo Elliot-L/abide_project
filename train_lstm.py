@@ -43,16 +43,35 @@ if __name__ == '__main__':
     x_train, y_train, x_valid, y_valid = load_dataset(asd_data_path, ctl_data_path)
 
     simple_model = tf.keras.models.Sequential([
-        tf.keras.layers.LSTM(128, input_shape=(None, 1280)), #128 units, 1280 input_dim
+        tf.keras.layers.LSTM(256, input_shape=(None, 1280)), #128 units, 1280 input_dim
         tf.keras.layers.BatchNormalization(),  # fuck batchnorm tho
         tf.keras.layers.Dense(2, activation='softmax')] #output dim 2
     )
 
     simple_model.compile(loss='sparse_categorical_crossentropy',
-                  optimizer='sgd',
+                  optimizer='adam',
                   metrics=['accuracy'])
 
-    simple_model.fit(x_train, y_train,
+    history = simple_model.fit(x_train, y_train,
               validation_data=(x_valid, y_valid),
               batch_size=16,
               epochs=100)
+
+    history = history.history
+    # plot_loss
+    plt.plot(history['loss'], label='loss')
+    plt.plot(history['val_loss'], label='val_loss')
+    plt.xlabel('epochs')
+    plt.legend(loc='best')
+    plt.grid()
+    plt.savefig('lstm3d_losses.png')
+    plt.clf()
+
+    # plot accuracy
+    plt.plot(history['accuracy'], label='accuracy')
+    plt.plot(history['val_accuracy'], label='val_accuracy')
+    plt.xlabel('epochs')
+    plt.legend(loc='best')
+    plt.grid()
+    plt.savefig('lstm3d_accuracy.png')
+    plt.clf()

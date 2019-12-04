@@ -3,10 +3,15 @@ import json
 import jsonpickle
 import numpy as np
 
+def myconverter(o):
+    if isinstance(o, np.float32):
+        return float(o)
+
 def dump_json(filepath, filename, output):
     os.makedirs(filepath, exist_ok=True)
     with open(os.path.join(filepath, filename), 'w') as out:
-        json.dump(jsonpickle.encode(output), out, indent=4)
+        # json.dump(jsonpickle.encode(output), out, indent=4)
+        json.dump(output, out, indent=4, default=myconverter)
     out.close()
 
 
@@ -14,7 +19,8 @@ def load_json(filepath):
     with open(filepath) as file:
         js_string = json.load(file)
     file.close()
-    return jsonpickle.decode(js_string)
+    # return jsonpickle.decode(js_string)
+    return js_string
 
 
 def train_valid_split_indices(max_index, validation_percentage=0.3, min_index=0, random_seed=None):

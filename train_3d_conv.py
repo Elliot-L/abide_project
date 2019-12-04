@@ -22,10 +22,10 @@ if __name__ == '__main__':
     model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu'))
     model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
 
-    model.add(layers.Dropout(0.25))
-    model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
-    model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
-    model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
+    # model.add(layers.Dropout(0.25))
+    # model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
+    # model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu'))
+    # model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
     model.add(layers.Dropout(0.25))
     model.add(layers.Flatten())
     model.add(layers.Dense(32, activation='relu'))
@@ -35,7 +35,26 @@ if __name__ == '__main__':
                   optimizer=Adam(lr=lr),
                   metrics=['accuracy'])
 
-    model.fit(x_train, y_train,
+    history = model.fit(x_train, y_train,
               validation_data=(x_valid, y_valid),
               batch_size=1,
               epochs=100)
+
+    history = history.history
+    # plot_loss
+    plt.plot(history['loss'], label='loss')
+    plt.plot(history['val_loss'], label='val_loss')
+    plt.xlabel('epochs')
+    plt.legend(loc='best')
+    plt.grid()
+    plt.savefig('conv3d_losses.png')
+    plt.clf()
+
+    # plot accuracy
+    plt.plot(history['accuracy'], label='accuracy')
+    plt.plot(history['val_accuracy'], label='val_accuracy')
+    plt.xlabel('epochs')
+    plt.legend(loc='best')
+    plt.grid()
+    plt.savefig('conv3d_accuracy.png')
+    plt.clf()
